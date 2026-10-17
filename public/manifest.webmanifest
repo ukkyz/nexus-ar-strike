@@ -1,0 +1,41 @@
+{
+  "id": "/?source=pwa",
+  "name": "NexusAR Strike · AR Team FPS",
+  "short_name": "NexusAR",
+  "description": "Android AR first-person shooter with Wi-Fi hotspot squad play (4 teams × 5 operators), Gaussian splat environment enhancement and a progressive auto-track minimap.",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["fullscreen", "standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#04070d",
+  "theme_color": "#04070d",
+  "categories": ["games", "entertainment"],
+  "launch_handler": { "client_mode": "focus-existing" },
+  "icons": [
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Host a squad LAN",
+      "short_name": "Host",
+      "url": "/?tab=host"
+    },
+    {
+      "name": "Join a squad",
+      "short_name": "Join",
+      "url": "/?tab=join"
+    }
+  ]
+}

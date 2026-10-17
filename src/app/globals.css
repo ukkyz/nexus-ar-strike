@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background:
+    radial-gradient(circle at 20% -10%, rgba(56, 189, 248, 0.16), transparent 55%),
+    radial-gradient(circle at 90% 10%, rgba(168, 85, 247, 0.12), transparent 45%),
+    #04070d;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+.input {
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid rgb(51 65 85);
+  background: rgba(2, 6, 15, 0.6);
+  padding: 0.6rem 0.8rem;
+  font-size: 0.9rem;
+  color: rgb(226 232 240);
+  outline: none;
+}
+
+.input:focus {
+  border-color: rgb(56 189 248);
+}
+
+.btn-primary {
+  width: 100%;
+  border-radius: 0.6rem;
+  background: linear-gradient(90deg, #0ea5e9, #22d3ee);
+  padding: 0.8rem;
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  font-weight: 700;
+  color: #030712;
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+}
