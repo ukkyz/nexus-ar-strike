@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { eq, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { db } from "@/db";
-import { mapNodes, players } from "@/db/schema";
+import { mapNodes, matches, players } from "@/db/schema";
 import { CELL_SIZE } from "@/lib/game";
 import { buildState, findPlayer, getMatchByCode, log } from "@/lib/state";
 
@@ -66,9 +66,10 @@ export async function POST(req: Request, ctx: { params: Promise<{ code: string }
     for (const team of [1, 2, 3, 4]) {
       const total = roster.filter((p) => p.team === team).reduce((s, p) => s + p.score, 0);
       if (total >= match.scoreLimit) {
-        await db.execute(
-          sql`update matches set status = 'ended', ended_at = now() where id = ${match.id}`,
-        );
+        await db
+          .update(matches)
+          .set({ status: "ended", endedAt: new Date() })
+          .where(eq(matches.id, match.id));
         await log(match.id, "end", `Team ${team} secured the sector`, team);
         break;
       }

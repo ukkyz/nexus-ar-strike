@@ -1,24 +1,35 @@
-import { drizzle } from "drizzle-orm/node-postgres";
-import { Pool } from "pg";
+import { drizzle } from "drizzle-orm/better-sqlite3";
+import { migrate } from "drizzle-orm/better-sqlite3/migrator";
+import Database from "better-sqlite3";
+import { mkdirSync } from "node:fs";
+import { dirname } from "node:path";
+import * as schema from "./schema";
 
-const databaseUrl = process.env.DATABASE_URL;
+// File-backed SQLite: zero-config persistence that runs entirely on the
+// host device, so matches keep working on an offline Wi-Fi hotspot with
+// no external database server. Point SQLITE_FILE at another path to
+// relocate the database file.
+const dbFile = process.env.SQLITE_FILE ?? "nexus-ar-strike.db";
 
-if (!databaseUrl) {
-  throw new Error("DATABASE_URL is required");
-}
+mkdirSync(dirname(dbFile), { recursive: true });
 
 const globalForDb = globalThis as typeof globalThis & {
-  __arenaNextJsPostgresqlPool?: Pool;
+  __nexusArStrikeSqlite?: Database.Database;
 };
 
-export const pool =
-  globalForDb.__arenaNextJsPostgresqlPool ??
-  new Pool({
-    connectionString: databaseUrl,
-  });
+export const client =
+  globalForDb.__nexusArStrikeSqlite ?? new Database(dbFile);
 
 if (process.env.NODE_ENV !== "production") {
-  globalForDb.__arenaNextJsPostgresqlPool = pool;
+  globalForDb.__nexusArStrikeSqlite = client;
 }
 
-export const db = drizzle(pool);
+// WAL keeps reads (state polling) fast while the host writes ticks/actions.
+client.pragma("journal_mode = WAL");
+
+export const db = drizzle(client, { schema });
+
+// Auto-apply pending Drizzle migrations on boot (idempotent — tracked in
+// the __drizzle_migrations journal table), so a fresh checkout or a
+// reinstalled PWA host needs no manual database setup.
+migrate(db, { migrationsFolder: "./drizzle" });

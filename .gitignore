@@ -1,1 +1,16 @@
+# env
 .env
+
+# next.js
+.next/
+next-env.d.ts
+tsconfig.tsbuildinfo
+
+# deps
+node_modules/
+
+# sqlite persistence
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
